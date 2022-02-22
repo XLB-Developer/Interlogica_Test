@@ -54,5 +54,22 @@ having count(Targa)>1
 
 
 
+--La targa delle auto che non sono state coinvolte in sinistri dopo il 20/01/2021 
+Select distinct(AUTO.Targa)
+from AUTO
+EXCEPT
+Select distinct(AUTO.Targa)
+from AUTO
+left join AUTOCOINVOLTE on AUTO.Targa = AUTOCOINVOLTE.Targa
+left join SINISTRI on AUTOCOINVOLTE.CodS = SINISTRI.CodS
+where Giorno> '20210120' 
+
+
+-- Il codice dei sinistri in cui non sono state coinvolte auto con cilindrata inferiore a 2000 cc
+Select SINISTRI.CodS
+from SINISTRI
+left join AUTOCOINVOLTE on SINISTRI.CodS =AUTOCOINVOLTE.CodS
+left join AUTO on AUTOCOINVOLTE.Targa = AUTO.Targa
+where Cilindrata>2000
 
 
