@@ -1,10 +1,25 @@
-
 --This needs to run just once in order to allow cmd commands
 EXEC sp_configure 'show advanced options', '1'
 RECONFIGURE
 --Enabling xp_cmdshell
 EXEC sp_configure 'xp_cmdshell', '1' 
 RECONFIGURE
+
+
+
+--Mostrare l’elenco delle auto (targa e marca), con relativo proprietario, che sono coinvolte in sinistri, 
+--per ognuna dire se c’è stata rivalutazione o no e indicare l’importo rivalutato.
+Select Distinct(AUTOCOINVOLTE.Targa), Marca, PROPRIETARI.Nome, ImportoDanno,  ImportoRivalutato, 
+case
+	when ImportoDanno <> ImportoRivalutato 
+	then 'yes'
+	else 'no'
+END	as Rivalutato
+from AUTOCOINVOLTE
+left join AUTO on AUTOCOINVOLTE.Targa = AUTO.Targa
+left join PROPRIETARI on AUTO.CodF= PROPRIETARI.CodF
+
+
 
 
 -- Targa e Marca delle Auto di cilindrata superiore a 2000 cc o di potenza superiore a 120 CV 
